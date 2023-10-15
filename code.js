@@ -1,57 +1,33 @@
-function merge(arr, l, m, r){
-    var i, j, k;
-    var n1 = m - l + 1;
-    var n2 = r - m;
-    var L = []
-    var R = []
-
-    for (i = 0; i < n1; i++)
-        L[i] = arr[l + i]
-    for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j]
-
-    i = 0
-    j = 0
-    k = l
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i]
-            i++
-        } else {
-            arr[k] = R[j]
-            j++
-        }
-        k++
-    }
-
-    while (i < n1) {
-        arr[k] = L[i]
-        i++
-        k++
-    }
-
-    while (j < n2) {
-        arr[k] = R[j]
-        j++
-        k++
-    }
-}
-
 function mergesort(arr){
-    var n = arr.length
-    var curr_size
-    var left_start
+    var tempL
+    var tempR
 
-    for (curr_size = 1; curr_size <= n - 1; curr_size = 2 * curr_size) {
-        for (left_start = 0; left_start < n - 1; left_start += 2 * curr_size) {
-            var mid = Math.min(left_start + curr_size - 1, n - 1);
-            var right_end = Math.min(left_start + 2 * curr_size - 1, n - 1);
-            merge(arr, left_start, mid, right_end);
+    for(var size = 1; size < arr.length; size*=2){ //loop for the size of each split array
+        //console.log(size, "arr size")
+        for(var left = 0; left < arr.length; left+=size*2){ //figuring out where the left most index is for each array split
+            var left2 = left+size
+            //console.log(left, left2+size, "scope")
+            for(var i = left; i < left2+size; i++){ // comparing every number from each split section
+                for(var j = i; j < left2 + size; j++){
+                    tempR = arr[j]
+                    tempL = arr[i]
+                    //console.log(i,j)
+                    if(tempL > tempR){
+                        //console.log(tempL, tempR, "swapped")
+                        arr[i] = tempR
+                        arr[j] = tempL
+                        //console.log(arr)
+                    }
+                }
+            }
         }
+        //console.log(arr)
     }
 
     return arr;
 }
 
-//console.log(mergesort([5,4,3,7,2,1,2])) //debugging
+//console.log(mergesort([4, 3, 8, 5, 9, 2, 5, 1, 7, 10, 8, 0, 3])) //debugging
 // used https://www.geeksforgeeks.org/iterative-merge-sort/
+// used https://stackoverflow.com/questions/46695942/iterative-in-place-mergesort
+
